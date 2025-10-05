@@ -181,6 +181,8 @@ export const updateAssistant = async (req, res) => {
       assistantImage = imageUrl;
     }
 
+
+    
     const user = await User.findByIdAndUpdate(
       req.userId,
       { assistantName, assistantImage },
