@@ -80,48 +80,57 @@ function Customize2() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 const token = localStorage.getItem("token"); 
-    const handleUpdateAssistant = async () => {
-        if (!assistantName.trim()) return; // Prevent empty names
-        setLoading(true);
+  const handleUpdateAssistant = async () => {
+    if (!assistantName.trim()) return;
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-        try {
-            let result;
+    if (!token) {
+        alert("You are not logged in!");
+        setLoading(false);
+        return;
+    }
 
-            if (backendImage) {
-                // If user selected a new image file, use FormData
-                const formData = new FormData();
-                formData.append("assistantName", assistantName);
-                formData.append("assistantImage", backendImage);
+    try {
+        let result;
 
-                result = await axios.post(
-                    `${serverUrl}/api/user/update`,
-                    formData,
-                    {
-                        withCredentials: true,
-                        headers: { "Content-Type": "multipart/form-data",
-                                     "Authorization": `Bearer ${token}` 
-                        },
-               
+        if (backendImage) {
+            const formData = new FormData();
+            formData.append("assistantName", assistantName);
+            formData.append("assistantImage", backendImage);
+
+            result = await axios.post(
+                `${serverUrl}/api/user/update`,
+                formData,
+                {
+                    withCredentials: true,
+                    headers: { 
+                        "Content-Type": "multipart/form-data",
+                        "Authorization": `Bearer ${token}`
                     }
-                );
-            } else {
-                // No new file, just send JSON
-                result = await axios.post(
-                    `${serverUrl}/api/user/update`,
-                    { assistantName, imageUrl: selectedImage },
-                    { withCredentials: true }
-                );
-            }
-
-            setUserData(result.data);
-            navigate("/"); // Redirect after update
-        } catch (error) {
-            console.error("Update Assistant Error:", error.response?.data || error.message);
-            alert(error.response?.data?.message || "Something went wrong!");
-        } finally {
-            setLoading(false);
+                }
+            );
+        } else {
+            result = await axios.post(
+                `${serverUrl}/api/user/update`,
+                { assistantName, imageUrl: selectedImage },
+                {
+                    withCredentials: true,
+                    headers: { "Authorization": `Bearer ${token}` }
+                }
+            );
         }
-    };
+
+        setUserData(result.data);
+        navigate("/");
+    } catch (error) {
+        console.error("Update Assistant Error:", error.response?.data || error.message);
+        alert(error.response?.data?.message || "Something went wrong!");
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     return (
         <div className='w-full min-h-[100vh] bg-gradient-to-t from-black to-[#030353] flex justify-center items-center flex-col p-5 relative'>
