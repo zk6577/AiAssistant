@@ -79,7 +79,7 @@ function Customize2() {
     const [assistantName, setAssistantname] = useState(userData?.assistantName || "");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+const token = localStorage.getItem("token"); 
     const handleUpdateAssistant = async () => {
         if (!assistantName.trim()) return; // Prevent empty names
         setLoading(true);
@@ -99,6 +99,7 @@ function Customize2() {
                     {
                         withCredentials: true,
                         headers: { "Content-Type": "multipart/form-data" },
+                        "Authorization": `Bearer ${token}` 
                     }
                 );
             } else {
