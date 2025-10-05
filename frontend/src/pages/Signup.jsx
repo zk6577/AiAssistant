@@ -35,9 +35,14 @@ const handleSignUp = async (e)=>{
     setErr("");
     setLoading(true);
   try {
-    let result= await axios.post(`${serverUrl}/api/auth/signup`,
+    const result= await axios.post(`${serverUrl}/api/auth/signup`,
     formData
     ,{withCredentials:true});
+
+       if (result.data.token) {
+            localStorage.setItem("token", result.data.token);
+        }
+
  setUserData(result.data)
         setLoading(false);
         navigate("/customize")
