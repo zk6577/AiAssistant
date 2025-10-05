@@ -10,27 +10,37 @@ function Customize2() {
     const [assistantName,setAssistantname]=useState(userData?.assistantName || "");
     const [loading,setLoading]=useState(false); 
 const navigate=useNavigate();
-    const handleUpdateAssistant=async()=>{
-       try{
-        setLoading(true)
-      const payload = {
-      assistantName,
-      imageUrl: selectedImage, 
-    };
+const handleUpdateAssistant = async () => {
+  try {
+    setLoading(true);
 
-          const result= await axios.post(`${serverUrl}/api/user/update`,payload,{withCredentials:true});
+    let formData = new FormData();
+    formData.append("assistantName", assistantName);
 
-
-console.log(result.data)
-setUserData(result.data);
-              navigate("/")
-       }catch(error){
-       console.log(error);
-
-       }finally{
-        setLoading(false)
-       }
+    if (backendImage) {
+      formData.append("assistantImage", backendImage); // actual file
+    } else {
+      formData.append("imageUrl", selectedImage); // URL/string
     }
+
+    const result = await axios.post(
+      `${serverUrl}/api/user/update`,
+      formData,
+      {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    setUserData(result.data);
+    navigate("/");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
     
   return (
     <div  className='w-full min-h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col p-5 relative'>
