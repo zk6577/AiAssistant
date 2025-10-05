@@ -27,12 +27,14 @@ const user=await User.create({
 });
 const token=  genToken(user._id);
 
-res.cookie("token",token,{
-    httpOnly:true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite:"None",
-    secure:true
-})
+const isProduction = process.env.NODE_ENV === "production";
+
+res.cookie("token", token, {
+  httpOnly: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  sameSite: isProduction ? "None" : "Lax",
+  secure: isProduction,
+});
 return res.status(201).json({user})
 
   }catch(error){
@@ -61,12 +63,14 @@ const {email,password}=req.body;
 const token= genToken(user._id);
 
 
-res.cookie("token",token,{
-    httpOnly:true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite:"None",
-    secure:true
-})
+const isProduction = process.env.NODE_ENV === "production";
+
+res.cookie("token", token, {
+  httpOnly: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  sameSite: isProduction ? "None" : "Lax",
+  secure: isProduction,
+});
 return res.status(200).json({user})
 
   }catch(error){
