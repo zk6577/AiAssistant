@@ -39,9 +39,7 @@ const handleSignUp = async (e)=>{
     formData
     ,{withCredentials:true});
 
-       if (result.data.token) {
-            localStorage.setItem("token", result.data.token);
-        }
+      
 
  setUserData(result.data)
         setLoading(false);

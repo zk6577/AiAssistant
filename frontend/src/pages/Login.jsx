@@ -35,9 +35,7 @@ const handleSignIn = async (e)=>{
     const result= await axios.post(`${serverUrl}/api/auth/login`,
     formData
     ,{withCredentials:true});
-     if (result.data.token) {
-            localStorage.setItem("token", result.data.token);
-        }
+    
  setUserData(result.data)
         SetLoading(false);
         navigate("/")
