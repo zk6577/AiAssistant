@@ -24,30 +24,28 @@ if(!user){
 }
 }
 
-export const updateAssistant=async(req,res)=>{
-try {
-    const {assistantName,imageUrl}=req.body;
+export const updateAssistant = async (req, res) => {
+  try {
+    const { assistantName, imageUrl } = req.body;
+
     let assistantImage;
-    if(req.file){
-      assistantImage=await uploadOnCloudinary(req.file.path);
-    } else{
-        assistantImage=imageUrl;
-
+    if (req.file) {
+      assistantImage = await uploadOnCloudinary(req.file.path);
+    } else {
+      assistantImage = imageUrl || null;
     }
-     const user=await User.findByIdAndUpdate(req.userId,{
-        assistantName,assistantImage
-     },{new:true}).select("-password")
 
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { assistantName, assistantImage },
+      { new: true }
+    ).select("-password");
 
-
-
-return res.status(200).json(user);
-
-} catch (error) {
-        return res.status(500).json({message:"Error in the Updating Assistant"});
-
-}
-}
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: "Error in the Updating Assistant" });
+  }
+};
 
 
 export const askToAssistant= async (req,res)=>{

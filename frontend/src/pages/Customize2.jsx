@@ -13,15 +13,25 @@ const navigate=useNavigate();
     const handleUpdateAssistant=async()=>{
        try{
         setLoading(true)
-        let formdata=new FormData()
-        formdata.append("assistantName",assistantName);
-        if(backendImage){
-            formdata.append("assistantImage",backendImage);
+     let formdata = new FormData();
+formdata.append("assistantName", assistantName);
 
-        }else{
-            formdata.append("imageUrl",selectedImage )
-        }
-        const result= await axios.post(`${serverUrl}/api/user/update`,formdata,{withCredentials:true});
+if (backendImage) {
+   // this is a File (Blob) from input type="file"
+   formdata.append("assistantImage", backendImage);
+} else {
+   // just pass the image URL if selected
+   formdata.append("imageUrl", selectedImage);
+}
+const result = await axios.post(
+  `${serverUrl}/api/user/update`,
+  formdata,
+  {
+    withCredentials: true,
+    headers: { "Content-Type": "multipart/form-data" }
+  }
+);
+
 console.log(result.data)
 setUserData(result.data);
               navigate("/")
