@@ -5,7 +5,9 @@ import axios from  "axios";
 export const userDataContext=createContext();
 
 function UserContext({children}) {
-    const serverUrl="http://localhost:8000"
+   const serverUrl = import.meta.env.MODE === "development"
+  ? "http://localhost:8000"
+  : "https://aiassiatantbackend.onrender.com";
 
  const[userData,setUserData]=useState(null);
 const [frontendImage,setFrontendImage]=useState(null);
