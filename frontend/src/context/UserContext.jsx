@@ -41,6 +41,7 @@ const getGeminiResponse= async (command)=>{
 
 
 
+
 useEffect(()=>{
 handleCurrentUser();
 },[])
