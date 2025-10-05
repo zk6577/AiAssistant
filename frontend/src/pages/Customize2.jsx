@@ -21,14 +21,8 @@ const navigate=useNavigate();
         }else{
             formdata.append("imageUrl",selectedImage )
         }
-        const result = await axios.post(
-  `${serverUrl}/api/user/update`,
-  {
-    assistantName,
-    imageUrl: selectedImage,
-  },
-  { withCredentials: true }
-);
+          const result= await axios.post(`${serverUrl}/api/user/update`,payload,{withCredentials:true});
+
 
 console.log(result.data)
 setUserData(result.data);
