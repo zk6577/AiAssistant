@@ -13,14 +13,11 @@ const navigate=useNavigate();
     const handleUpdateAssistant=async()=>{
        try{
         setLoading(true)
-        let formdata=new FormData()
-        formdata.append("assistantName",assistantName);
-        if(backendImage){
-            formdata.append("assistantImage",backendImage);
+      const payload = {
+      assistantName,
+      imageUrl: selectedImage, 
+    };
 
-        }else{
-            formdata.append("imageUrl",selectedImage )
-        }
           const result= await axios.post(`${serverUrl}/api/user/update`,payload,{withCredentials:true});
 
 
