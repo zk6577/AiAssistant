@@ -1,26 +1,49 @@
- import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
+//  import { v2 as cloudinary } from 'cloudinary';
+// import fs from "fs"
 
- const uploadOnCloudinary= async(filepath)=>{
+//  const uploadOnCloudinary= async(filepath)=>{
 
-   cloudinary.config({
-    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-    api_key:process.env.CLOUDINARY_API_KEY,
-    api_secret:process.env.CLOUDINARY_API_SECRET,
-   })
-  try{
- const uploadResult = await cloudinary.uploader
-       .upload( filepath  );
-       fs.unlinkSync(filepath)
-       return uploadResult.secure_url;
-  }catch(error){
-           fs.unlinkSync(filepath)
-return res.status(500).json({message:"cloudinnary error"})
-  }
-
-
-
- }
+//    cloudinary.config({
+//     cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+//     api_key:process.env.CLOUDINARY_API_KEY,
+//     api_secret:process.env.CLOUDINARY_API_SECRET,
+//    })
+//   try{
+//  const uploadResult = await cloudinary.uploader
+//        .upload( filepath  );
+//        fs.unlinkSync(filepath)
+//        return uploadResult.secure_url;
+//   }catch(error){
+//            fs.unlinkSync(filepath)
+// return res.status(500).json({message:"cloudinnary error"})
+//   }
 
 
- export default uploadOnCloudinary;
+
+//  }
+
+
+//  export default uploadOnCloudinary;
+import { v2 as cloudinary } from "cloudinary";
+import streamifier from "streamifier";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const uploadOnCloudinary = async (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "assistants" },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result.secure_url);
+      }
+    );
+    streamifier.createReadStream(fileBuffer).pipe(stream);
+  });
+};
+
+export default uploadOnCloudinary;

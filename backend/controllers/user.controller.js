@@ -29,11 +29,17 @@ export const updateAssistant = async (req, res) => {
     const { assistantName, imageUrl } = req.body;
 
     let assistantImage;
+    // if (req.file) {
+    //   assistantImage = await uploadOnCloudinary(req.file.path);
+    // } else {
+    //   assistantImage = imageUrl || null;
+    // }
     if (req.file) {
-      assistantImage = await uploadOnCloudinary(req.file.path);
-    } else {
-      assistantImage = imageUrl || null;
-    }
+  assistantImage = await uploadOnCloudinary(req.file.buffer);
+} else {
+  assistantImage = imageUrl || null;
+}
+
 
     const user = await User.findByIdAndUpdate(
       req.userId,
