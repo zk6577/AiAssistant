@@ -50,16 +50,26 @@ const FRONTEND_URL = [
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
-    credentials: true, // ✅ allow cookies
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow mobile apps, Postman, etc.
+      if (FRONTEND_URL.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(cookieParser());
 
 // ✅ routes
 app.use("/api/auth", authRouter);
+
+
+
 app.use("/api/user", userRouter);
 
 const port = process.env.PORT || 5000;
