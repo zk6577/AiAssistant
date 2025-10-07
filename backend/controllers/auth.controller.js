@@ -35,7 +35,12 @@ res.cookie("token", token, {
   sameSite: isProduction ? "None" : "Lax",
   secure: isProduction,
 });
-return res.status(201).json({user})
+  return res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token,
+    });
 
   }catch(error){
 return res.status(500).json({message:`sign up error ${error}`})
@@ -71,7 +76,14 @@ res.cookie("token", token, {
   sameSite: isProduction ? "None" : "Lax",
   secure: isProduction,
 });
-return res.status(200).json({user})
+   return res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      assistantName: user.assistantName,
+      assistantImage: user.assistantImage,
+      token,
+    });
 
   }catch(error){
 
